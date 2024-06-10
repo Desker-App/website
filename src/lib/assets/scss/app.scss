@@ -1,0 +1,77 @@
+@use "sass:map";
+@import "./colors";
+@import "./fonts";
+
+:root {
+  @each $name, $color in $colors {
+    --color-#{$name}: #{$color};
+  }
+}
+
+*, ::before, ::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  font-family: $font-sans;
+}
+
+@for $i from 1 to 7 {
+  h#{$i} {
+    font-family: $font-serif;
+  }
+}
+
+button {
+  cursor: pointer;
+  &:disabled {
+    cursor: not-allowed;
+    opacity: .75;
+  }
+
+  &:not(.nodefault) {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-family: $font-sans;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-rendering: geometricPrecision;
+  
+    transform-origin: center;
+    transition: .25s;
+  
+    &:not(:disabled):hover {
+      scale: 1.05;
+      border-radius: 10px;
+      color: var(--color-secondary-accent);
+      background-color: var(--color-secondary);
+    }
+  }
+}
+
+input {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  font-family: $font-sans;
+}
+
+a {
+  color: var(--color-secondary-accent);
+  font-weight: 700;
+  text-decoration: none;
+  transition: .15s;
+
+  &:hover {
+    text-decoration: underline;
+    color: var(--color-secondary);
+  }
+}

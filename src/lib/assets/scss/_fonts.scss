@@ -1,0 +1,34 @@
+@import "./font_names";
+// Noto Serif Display
+@font-face {
+	font-family: $_ff_serif;
+	src: url("/fonts/Noto/NotoSerif.ttf") format("truetype");
+}
+@font-face {
+	font-family: $_ff_serif;
+	src: url("/fonts/Noto/NotoSerif-Italic.ttf") format("truetype");
+	font-style: italic;
+}
+
+// Noto Serif Display
+@font-face {
+	font-family: $_ff_serif_display;
+	src: url("/fonts/Noto/NotoSerifDisplay.ttf") format("truetype");
+}
+@font-face {
+	font-family: $_ff_serif_display;
+	src: url("/fonts/Noto/NotoSerifDisplay-Italic.ttf")
+		format("truetype");
+	font-style: italic;
+}
+
+// Noto Sans
+@font-face {
+	font-family: $_ff-sans;
+	src: url("/fonts/Noto/NotoSans.ttf") format("truetype");
+}
+@font-face {
+	font-family: $_ff-sans;
+	src: url("/fonts/Noto/NotoSans-Italic.ttf") format("truetype");
+	font-style: italic;
+}
