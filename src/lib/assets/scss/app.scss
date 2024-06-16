@@ -60,8 +60,9 @@ button {
 input {
   padding: 5px 10px;
   border-radius: 5px;
-  border: none;
+  border: 1.5px dashed var(--color-primary);
   font-family: $font-sans;
+  outline-color: var(--color-primary-accent);
 }
 
 a {

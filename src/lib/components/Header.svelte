@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { get_installation_url } from "$lib";
 	import Banner from "$lib/assets/brand/Banner.svg";
-	import { askFor, type UserResponse } from "$lib/message";
-	const userGetter = askFor<{user: UserResponse}>("user");
+	import { askFor } from "$lib/message";
 </script>
 
 <header>
@@ -12,13 +11,15 @@
 
 	<nav>
 		<ul>
-			{#await userGetter then { data }}
-				{@const is_anonymous = !data?.user || data.user.is_anonymous}
-				<li>
-					<a href={is_anonymous ? "/signup" : "/manage"}
-						>{is_anonymous ? "Create" : "Manage"} your account</a
-					>
-				</li>
+			{#await askFor("ping") then}
+				{#await askFor("user") then { data }}
+					{@const is_anonymous = !data?.user || data.user.is_anonymous}
+					<li>
+						<a href={is_anonymous ? "/link?create" : "/manage"}
+							>{is_anonymous ? "Create" : "Manage"} your account</a
+						>
+					</li>
+				{/await}
 			{:catch}
 				<li>
 					<a href={get_installation_url()} target="_blank">

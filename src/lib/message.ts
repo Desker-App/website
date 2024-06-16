@@ -1,10 +1,60 @@
 import type { Database } from "./types/supabase";
-import type { Session } from "@supabase/supabase-js";
+import type {
+	Session,
+	UserAttributes,
+	VerifyOtpParams,
+} from "@supabase/supabase-js";
 import BetterPostMessage from "better-postmessage";
 
-export interface Message<Data = any> {
-	id: string;
-	data?: Data;
+interface ReqAnsValue<Request = never, Answer = never> {
+	requestData: Request;
+	answerData: Answer;
+}
+export interface RequestsAnswers {
+	ping: ReqAnsValue<never, { pong: true }>;
+	user: ReqAnsValue<
+		never,
+		{
+			user: Session["user"] & {
+				plan: Database["public"]["Tables"]["plans"]["Row"];
+			};
+		}
+	>;
+	desks: ReqAnsValue<
+		never,
+		{ desks: Database["public"]["Tables"]["desks"]["Row"][] }
+	>;
+	clearCache: ReqAnsValue<{
+		user?: boolean;
+		desks?: boolean;
+	}>;
+	logout: ReqAnsValue;
+	global_logout: ReqAnsValue;
+	signin: ReqAnsValue<{
+		email: string;
+		password: string;
+		force?: boolean
+	}>;
+	signup: ReqAnsValue<{
+		email: string;
+		password: string;
+		username?: string;
+	}>;
+	updateuser: ReqAnsValue<{
+		data: UserAttributes;
+	}>;
+	deleteuser: ReqAnsValue;
+	otp_signin: ReqAnsValue<VerifyOtpParams>;
+}
+
+export interface Message<
+	KEY extends keyof RequestsAnswers = keyof RequestsAnswers,
+	type extends "request" | "answer" = "request"
+> {
+	id: KEY;
+	data?: RequestsAnswers[KEY][type extends "request"
+		? "requestData"
+		: "answerData"];
 	error?: {
 		title: string;
 		description?: string;
@@ -12,24 +62,25 @@ export interface Message<Data = any> {
 }
 let proxy: BetterPostMessage<Message, Omit<Message, "id"> | void> | null = null;
 
-export async function askFor<R>(
-	id: string,
-	data?: Message["data"],
-	error?: Message["error"]
+export async function askFor<ID extends Message["id"] = Message["id"]>(
+	id: ID,
+	data?: Message<ID, "request">["data"],
+	error?: Message<ID>["error"]
 ) {
 	if (!proxy)
 		proxy = new BetterPostMessage(window, {
-			name: "Desker",
+			tunnel: "Desker",
 			debug: true,
-			answerTimeout: 1000,
+			answerTimeout: 2000,
 		});
-	const message = proxy.post({
-		id,
-		data,
-		error,
-	});
+	const message = proxy.post(
+		{
+			id,
+			data,
+			error,
+		},
+		id === "ping" ? 150 : undefined
+	);
 
-	return await message.answer as Omit<Message<R>, "id">;
+	return (await message.answer) as Omit<Message<ID, "answer">, "id">;
 }
-
-export type UserResponse = Session["user"] & Database["public"]["Tables"]["plans"]["Row"]
