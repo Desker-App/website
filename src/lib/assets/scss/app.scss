@@ -3,76 +3,131 @@
 @import "./fonts";
 
 :root {
-  @each $name, $color in $colors {
-    --color-#{$name}: #{$color};
-  }
+	@each $name, $color in $colors {
+		--color-#{$name}: #{$color};
+	}
 }
 
-*, ::before, ::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*,
+::before,
+::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 body {
-  background-color: var(--color-white);
-  color: var(--color-black);
-  font-family: $font-sans;
+	background-color: var(--color-white);
+	color: var(--color-black);
+	font-family: $font-sans;
 }
 
 @for $i from 1 to 7 {
-  h#{$i} {
-    font-family: $font-serif;
-  }
+	h#{$i} {
+		font-family: $font-serif;
+	}
 }
 
 button {
-  cursor: pointer;
-  &:disabled {
-    cursor: not-allowed;
-    opacity: .75;
-  }
+	cursor: pointer;
+	&:disabled {
+		cursor: not-allowed;
+		opacity: 0.75;
+	}
 
-  &:not(.nodefault) {
-    padding: 10px 15px;
-    border-radius: 5px;
-    border: none;
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    font-family: $font-sans;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-rendering: geometricPrecision;
-  
-    transform-origin: center;
-    transition: .25s;
-  
-    &:not(:disabled):hover {
-      scale: 1.05;
-      border-radius: 10px;
-      color: var(--color-secondary-accent);
-      background-color: var(--color-secondary);
-    }
-  }
+	&:not(.nodefault) {
+		padding: 10px 15px;
+		border-radius: 5px;
+		border: none;
+		background-color: var(--color-primary);
+		color: var(--color-white);
+		font-family: $font-sans;
+		text-transform: uppercase;
+		font-weight: 700;
+		letter-spacing: 1px;
+		text-rendering: geometricPrecision;
+
+		transform-origin: center;
+		transition: 0.25s;
+
+		&:not(:disabled):hover {
+			scale: 1.05;
+			border-radius: 10px;
+			color: var(--color-secondary-accent);
+			background-color: var(--color-secondary);
+		}
+	}
 }
 
 input {
-  padding: 5px 10px;
-  border-radius: 5px;
-  border: 1.5px dashed var(--color-primary);
-  font-family: $font-sans;
-  outline-color: var(--color-primary-accent);
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: 1.5px dashed var(--color-primary);
+	font-family: $font-sans;
+	outline-color: var(--color-primary-accent);
 }
 
 a {
-  color: var(--color-secondary-accent);
-  font-weight: 700;
-  text-decoration: none;
-  transition: .15s;
+	color: var(--color-secondary-accent);
+	font-weight: 700;
+	text-decoration: none;
+	transition: 0.15s;
 
-  &:hover {
-    text-decoration: underline;
-    color: var(--color-secondary);
-  }
+	&:hover {
+		text-decoration: underline;
+		color: var(--color-secondary);
+	}
+}
+
+//? https://codepen.io/tomhodgins/pen/QEwvEK/
+
+/* Default Table Style */
+table {
+	color: #333;
+	background: white;
+	border: 1px solid grey;
+	font-size: 12pt;
+	border-collapse: collapse;
+}
+table thead th,
+table tfoot th {
+	color: #777;
+	background: rgba(0, 0, 0, 0.1);
+}
+table caption {
+	padding: 0.5em;
+}
+table th,
+table td {
+	padding: 0.5em;
+	border: 1px solid lightgrey;
+}
+/* Zebra Table Style */
+[data-table-theme*="zebra"] tbody tr:nth-of-type(odd) {
+	background: rgba(0, 0, 0, 0.05);
+}
+[data-table-theme*="zebra"][data-table-theme*="dark"]
+	tbody
+	tr:nth-of-type(odd) {
+	background: rgba(255, 255, 255, 0.05);
+}
+/* Dark Style */
+[data-table-theme*="dark"] {
+	color: #ddd;
+	background: #333;
+	font-size: 12pt;
+	border-collapse: collapse;
+}
+[data-table-theme*="dark"] thead th,
+[data-table-theme*="dark"] tfoot th {
+	color: #aaa;
+	background: rgba(0255, 255, 255, 0.15);
+}
+[data-table-theme*="dark"] caption {
+	padding: 0.5em;
+}
+[data-table-theme*="dark"] th,
+[data-table-theme*="dark"] td {
+	padding: 0.5em;
+	border: 1px solid grey;
 }
