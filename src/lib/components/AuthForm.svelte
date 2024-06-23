@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { replaceState } from "$app/navigation";
+	import { goto, replaceState } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { askFor, type RequestsAnswers } from "$lib/message";
 	import toast from "svelte-french-toast";
 	import Form from "./Form.svelte";
+	import { updateAuth } from "../../routes/+layout.svelte";
 	export let user: RequestsAnswers["user"]["answerData"]["user"] | undefined =
 		undefined;
 
@@ -59,12 +60,11 @@
 
 				return toast.error(`[${error.title}]> ${error.description}`);
 			} else {
+				updateAuth();
+				goto("/manage");
 				toast.success(
-					"Congratulation ! You're now connected ! Website will reload in few seconds..."
+					"Congratulation ! You're now connected !"
 				);
-				return new Promise((res) => setTimeout(res, 3000)).then(() => {
-					window.location.href = "/";
-				});
 			}
 		}
 	}
@@ -168,8 +168,8 @@
 			</label>
 
 			<button type="submit">Connect and link</button>
-			<a href="./link?create">Don't have an account ?</a>
 			<a href="./reset-psw">Forgot your password ?</a>
+			<a href="./link?create">Don't have an account ?</a>
 		{:else}
 			<h2>Oups... An error occured.</h2>
 			<button

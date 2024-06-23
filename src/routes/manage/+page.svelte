@@ -7,7 +7,7 @@
 			throw goto("/get");
 		})
 		.then(({ data }) => {
-			data?.user.is_anonymous && goto("/link");
+			data?.user?.is_anonymous && goto("/link");
 			return data?.user;
 		});
 </script>

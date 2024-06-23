@@ -14,6 +14,11 @@
 			{#await askFor("ping") then}
 				{#await askFor("user") then { data }}
 					{@const is_anonymous = !data?.user || data.user.is_anonymous}
+					{#if is_anonymous}
+						<li>
+							<a href="/link?connect">Connect your account</a>
+						</li>
+					{/if}
 					<li>
 						<a href={is_anonymous ? "/link?create" : "/manage"}
 							>{is_anonymous ? "Create" : "Manage"} your account</a

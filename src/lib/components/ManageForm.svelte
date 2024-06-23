@@ -2,6 +2,8 @@
 	import { askFor, type RequestsAnswers } from "$lib/message";
 	import toast from "svelte-french-toast";
 	import Form from "./Form.svelte";
+	import { goto } from "$app/navigation";
+	import { updateAuth } from "../../routes/+layout.svelte";
 
 	export let user: RequestsAnswers["user"]["answerData"]["user"];
 </script>
@@ -37,6 +39,26 @@
 	<button type="submit">Save changes</button>
 </Form>
 
+<div id="plan">
+	<h2>Currently plan</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Desk limit</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>{user.plan.title}</td>
+				<td>{user.plan.desks_limit || "Unlimited"}</td>
+			</tr>
+		</tbody>
+	</table>
+	<a href="/upgrade"><button type="button">Upgrade</button></a>
+</div>
+
 <div id="danger">
 	<h2>Danger Zone</h2>
 	<button
@@ -45,12 +67,9 @@
 			const { error } = await askFor("logout");
 			if (error)
 				return toast.error(`[${error.title}]> ${error.description}`);
-			toast.success(
-				"You've been logged out ! Website will reload in a few seconds..."
-			);
-			setTimeout(() => {
-				document.location.reload();
-			}, 2000);
+			updateAuth();
+			goto("/");
+			toast.success("You've been logged out !");
 		}}>Logout</button
 	>
 	<button
@@ -66,12 +85,9 @@
 						`[${error.title}]> ${error.description}`
 					);
 
-				toast.success(
-					"Your account has been deleted ! Website will reload in a few seconds..."
-				);
-				setTimeout(() => {
-					document.location.reload();
-				}, 2000);
+				updateAuth();
+				goto("/");
+				toast.success("Your account has been deleted !");
 			}
 		}}>Delete Account</button
 	>

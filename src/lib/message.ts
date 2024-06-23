@@ -71,7 +71,7 @@ export async function askFor<ID extends Message["id"] = Message["id"]>(
 		proxy = new BetterPostMessage(window, {
 			tunnel: "Desker",
 			debug: true,
-			answerTimeout: 2000,
+			answerTimeout: 5_000,
 		});
 	const message = proxy.post(
 		{
