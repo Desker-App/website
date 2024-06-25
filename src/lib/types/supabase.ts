@@ -745,28 +745,16 @@ export type Database = {
       }
       plans: {
         Row: {
-          description: string | null
           desks_limit: number | null
-          id: string
-          is_one_time: boolean
-          price_EUR: number
-          title: string
+          name: string
         }
         Insert: {
-          description?: string | null
           desks_limit?: number | null
-          id: string
-          is_one_time: boolean
-          price_EUR: number
-          title: string
+          name: string
         }
         Update: {
-          description?: string | null
           desks_limit?: number | null
-          id?: string
-          is_one_time?: boolean
-          price_EUR?: number
-          title?: string
+          name?: string
         }
         Relationships: []
       }
@@ -796,7 +784,7 @@ export type Database = {
             columns: ["plan"]
             isOneToOne: false
             referencedRelation: "plans"
-            referencedColumns: ["id"]
+            referencedColumns: ["name"]
           },
         ]
       }

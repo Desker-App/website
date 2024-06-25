@@ -17,6 +17,16 @@
 	import { goto } from "$app/navigation";
 
 	onMount(async () => {
+		const searchParams = new URLSearchParams(location.search);
+
+		if (searchParams.has("update")) {
+			await askFor("clearCache", {
+				user: true,
+				desks: true,
+			});
+			updateAuth();
+		}
+
 		if (location.hash) {
 			const parameters = new URLSearchParams(location.hash.slice(1));
 			console.log(

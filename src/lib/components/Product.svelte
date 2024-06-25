@@ -2,25 +2,25 @@
 	import type Stripe from "stripe";
 	import Price from "./Price.svelte";
 	import type { Database } from "$lib/types/supabase";
-	import toast from "svelte-french-toast";
+	import type { RequestsAnswers } from "$lib/message";
 
 	export let product: Stripe.Product;
 	export let prices: Stripe.Price[];
-	export let user_plan: Database["public"]["Tables"]["plans"]["Row"];
+	export let user: RequestsAnswers["user"]["answerData"]["user"];
 	export let price_period: "month" | "year" = "month";
 	export let most_selected: boolean = false;
 
-	$: selected_price = prices.find(
-		(price) => price.recurring?.interval === price_period
-	);
-	$: product_selected = product.metadata["plan"] === user_plan.id;
+	$: selected_price =
+		price_period &&
+		prices.find((price) => price.recurring?.interval === price_period);
+	$: product_selected = product.metadata["plan"] === user.plan.name;
 </script>
 
 <section id={product.id} class:most_selected class:selected={product_selected}>
 	<h3>{product.name}</h3>
 	{#if selected_price}
 		<div class="price">
-			<Price price={selected_price} />
+			<Price price={selected_price} /> / {price_period.slice(0, 2)}
 		</div>
 	{/if}
 
@@ -33,13 +33,12 @@
 
 	{#if product_selected}
 		<p>This is your active product !</p>
+	{:else if selected_price}
+		<a href="/checkout/{selected_price.id}?user_id={user.id}">
+			<button type="button">Upgrade</button>
+		</a>
 	{:else}
-		<button
-			type="button"
-			on:click={() => {
-				toast.error("This feature is not implemented yet !");
-			}}>Upgrade</button
-		>
+		<p>An error has come with this product.</p>
 	{/if}
 </section>
 

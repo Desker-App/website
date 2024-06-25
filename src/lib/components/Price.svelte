@@ -2,7 +2,7 @@
 	import type Stripe from "stripe";
 	export let price: Stripe.Price;
 
-	$: value = (price.unit_amount ?? NaN) / 10;
+	$: value = (price.unit_amount ?? NaN) / 100;
 	const formater = new Intl.NumberFormat("fr-FR", {
 		currency: price.currency,
 		style: "currency",

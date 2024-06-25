@@ -51,7 +51,7 @@
 
 		<tbody>
 			<tr>
-				<td>{user.plan.title}</td>
+				<td>{user.plan.name}</td>
 				<td>{user.plan.desks_limit || "Unlimited"}</td>
 			</tr>
 		</tbody>
