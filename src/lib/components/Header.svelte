@@ -1,7 +1,11 @@
 <script lang="ts">
+	import { browser } from "$app/environment";
 	import { get_installation_url } from "$lib";
 	import Banner from "$lib/assets/brand/Banner.svg";
-	import { askFor } from "$lib/message";
+	import { askFor, type DeskerUser } from "$lib/message";
+
+	export let user: DeskerUser | undefined;
+	const is_anonymous = !user || user.is_anonymous;
 </script>
 
 <header>
@@ -12,24 +16,23 @@
 	<nav>
 		<ul>
 			{#await askFor("ping") then}
-				{#await askFor("user") then { data }}
-					{@const is_anonymous = !data?.user || data.user.is_anonymous}
-					{#if is_anonymous}
-						<li>
-							<a href="/link?connect">Connect your account</a>
-						</li>
-					{/if}
+				{#if is_anonymous}
 					<li>
-						<a href={is_anonymous ? "/link?create" : "/manage"}
-							>{is_anonymous ? "Create" : "Manage"} your account</a
-						>
+						<a href="/link?connect">Connect your account</a>
 					</li>
-				{/await}
+				{/if}
+				<li>
+					<a href={is_anonymous ? "/link?create" : "/manage"}
+						>{is_anonymous ? "Create" : "Manage"} your account</a
+					>
+				</li>
 			{:catch}
 				<li>
-					<a href={get_installation_url()} target="_blank">
-						<button type="button">Get the extension</button>
-					</a>
+					{#if browser}
+						<a href={get_installation_url()} target="_blank">
+							<button type="button">Get the extension</button>
+						</a>
+					{/if}
 				</li>
 			{/await}
 		</ul>

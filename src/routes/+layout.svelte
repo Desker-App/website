@@ -1,7 +1,18 @@
 <script lang="ts" context="module">
 	let force_update = writable(0);
-	export function updateAuth() {
+	export async function updateAuth(): Promise<void> {
 		force_update.set(get(force_update) + 1);
+
+		return updateLink().then((require_update) => {
+			if (typeof require_update === "boolean") {
+				console.log("SESSION COOKIE HAS BEEN EDITED", require_update);
+
+				if (require_update)
+					toast.success("Your account has been (re)linked!");
+				else toast.error("Your account has been unlinked.");
+				return invalidateAll().then(() => updateAuth());
+			}
+		});
 	}
 </script>
 
@@ -14,8 +25,11 @@
 	import toast, { Toaster } from "svelte-french-toast";
 	import { replaceState } from "$app/navigation";
 	import { get, writable } from "svelte/store";
-	import { goto } from "$app/navigation";
+	import { goto, invalidateAll } from "$app/navigation";
+	import { updateLink } from "$lib/linker";
+	import type { LayoutData } from "./$types";
 
+	export let data: LayoutData;
 	onMount(async () => {
 		const searchParams = new URLSearchParams(location.search);
 
@@ -25,6 +39,24 @@
 				desks: true,
 			});
 			updateAuth();
+		}
+		if (searchParams.has("toast")) {
+			try {
+				const { method, message } = JSON.parse(
+					searchParams.get("toast")!
+				);
+
+				switch (method) {
+					case "error":
+						toast.error(message);
+						break;
+					case "success":
+						toast.success(message);
+						break;
+					default:
+						break;
+				}
+			} catch (err) {}
 		}
 
 		if (location.hash) {
@@ -77,6 +109,6 @@
 <Toaster position="top-right" />
 
 {#key $force_update}
-	<Header />
+	<Header user={data.user} />
 	<slot />
 {/key}

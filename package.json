@@ -2,7 +2,9 @@
   "name": "desker",
   "version": "0.0.1",
   "dependencies": {
+    "@types/js-cookie": "^3.0.6",
     "better-postmessage": "^1.1.4",
+    "js-cookie": "^3.0.5",
     "stripe": "^15.10.0",
     "supabase": "^1.176.4",
     "svelte-french-toast": "^1.2.0",

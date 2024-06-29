@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
 	import Product from "$lib/components/Product.svelte";
-	import { askFor } from "$lib/message";
 
 	export let data: PageData;
+	const { user } = data;
 	let yearly_period: boolean = false;
 
 	console.log("Found products:", data.products);
@@ -12,34 +12,31 @@
 <h1>Upgrade</h1>
 
 <main>
-	{#await askFor("user") then raw}
-		{@const user = raw.data?.user}
-		{#if user}
-			<h2>Price periode</h2>
-			<div class="selector">
-				<span>Monthly</span>
-				<input type="checkbox" bind:checked={yearly_period} />
-				<span>Yearly</span>
-			</div>
+	{#if user}
+		<h2>Price periode</h2>
+		<div class="selector">
+			<span>Monthly</span>
+			<input type="checkbox" bind:checked={yearly_period} />
+			<span>Yearly</span>
+		</div>
 
-			<h2>Plans</h2>
-			<ul>
-				{#each data.products as { product, prices } (product.id)}
-					<li>
-						<Product
-							{product}
-							{prices}
-							{user}
-							price_period={yearly_period ? "year" : "month"}
-						/>
-					</li>
-				{/each}
-			</ul>
-		{:else}
-			<h2>Oups...</h2>
-			<p>Sorry, we were unable to get your active plan.</p>
-		{/if}
-	{/await}
+		<h2>Plans</h2>
+		<ul>
+			{#each data.products as { product, prices } (product.id)}
+				<li>
+					<Product
+						{product}
+						{prices}
+						{user}
+						price_period={yearly_period ? "year" : "month"}
+					/>
+				</li>
+			{/each}
+		</ul>
+	{:else}
+		<h2>Oups...</h2>
+		<p>Sorry, we were unable to get your active plan.</p>
+	{/if}
 </main>
 
 <style lang="scss">

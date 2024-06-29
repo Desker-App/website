@@ -6,24 +6,19 @@ import type {
 } from "@supabase/supabase-js";
 import BetterPostMessage from "better-postmessage";
 
+export type DeskerUser = Session["user"] & {
+	plan: Database["public"]["Tables"]["plans"]["Row"];
+};
+export type DeskerDesk = Database["public"]["Tables"]["desks"]["Row"];
+
 interface ReqAnsValue<Request = never, Answer = never> {
 	requestData: Request;
 	answerData: Answer;
 }
 export interface RequestsAnswers {
 	ping: ReqAnsValue<never, { pong: true }>;
-	user: ReqAnsValue<
-		never,
-		{
-			user: Session["user"] & {
-				plan: Database["public"]["Tables"]["plans"]["Row"];
-			};
-		}
-	>;
-	desks: ReqAnsValue<
-		never,
-		{ desks: Database["public"]["Tables"]["desks"]["Row"][] }
-	>;
+	user: ReqAnsValue<never, { user: DeskerUser }>;
+	desks: ReqAnsValue<never, { desks: DeskerDesk[] }>;
 	clearCache: ReqAnsValue<{
 		user?: boolean;
 		desks?: boolean;
@@ -33,7 +28,7 @@ export interface RequestsAnswers {
 	signin: ReqAnsValue<{
 		email: string;
 		password: string;
-		force?: boolean
+		force?: boolean;
 	}>;
 	signup: ReqAnsValue<{
 		email: string;

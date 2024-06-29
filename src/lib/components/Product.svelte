@@ -1,12 +1,11 @@
 <script lang="ts">
 	import type Stripe from "stripe";
 	import Price from "./Price.svelte";
-	import type { Database } from "$lib/types/supabase";
-	import type { RequestsAnswers } from "$lib/message";
+	import type { DeskerUser } from "$lib/message";
 
 	export let product: Stripe.Product;
 	export let prices: Stripe.Price[];
-	export let user: RequestsAnswers["user"]["answerData"]["user"];
+	export let user: DeskerUser;
 	export let price_period: "month" | "year" = "month";
 	export let most_selected: boolean = false;
 
@@ -34,7 +33,7 @@
 	{#if product_selected}
 		<p>This is your active product !</p>
 	{:else if selected_price}
-		<a href="/checkout/{selected_price.id}?user_id={user.id}">
+		<a href="/checkout/{selected_price.id}">
 			<button type="button">Upgrade</button>
 		</a>
 	{:else}

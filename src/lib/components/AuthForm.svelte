@@ -1,12 +1,21 @@
 <script lang="ts">
 	import { goto, replaceState } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { askFor, type RequestsAnswers } from "$lib/message";
+	import {
+		askFor,
+		type DeskerUser,
+		type RequestsAnswers,
+	} from "$lib/message";
 	import toast from "svelte-french-toast";
 	import Form from "./Form.svelte";
 	import { updateAuth } from "../../routes/+layout.svelte";
-	export let user: RequestsAnswers["user"]["answerData"]["user"] | undefined =
-		undefined;
+
+	export let user: DeskerUser | undefined = undefined;
+
+	const _default_redirect = "/manage";
+	export let redirect = _default_redirect;
+	if (user && !user.is_anonymous && redirect !== _default_redirect)
+		goto(redirect);
 
 	let showMailboxCheckMessage = user?.email && !user.confirmed_at;
 	async function formSubmited(data: FormData) {
@@ -60,11 +69,10 @@
 
 				return toast.error(`[${error.title}]> ${error.description}`);
 			} else {
-				updateAuth();
-				goto("/manage");
-				toast.success(
-					"Congratulation ! You're now connected !"
-				);
+				updateAuth().then(() => {
+					goto(redirect);
+				});
+				toast.success("Congratulation ! You're now connected !");
 			}
 		}
 	}
