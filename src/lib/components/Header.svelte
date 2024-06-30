@@ -63,6 +63,10 @@
 			display: flex;
 			align-items: center;
 
+			@media screen and (max-width: 524px) {
+				display: none;
+			}
+
 			> ul {
 				list-style: none;
 				display: flex;

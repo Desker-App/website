@@ -12,11 +12,22 @@
 	<title>Manage your account - Desker</title>
 </svelte:head>
 
-<h1>Welcome to your dashboard</h1>
+<main>
+	<h1>Welcome to your dashboard</h1>
 
-{#if user}
-	<ManageForm {user} subscription={data.subscriptions?.[0]} />
-{:else}
-	<h2>Oups...</h2>
-	<p>An error has come. Please contact us !</p>
-{/if}
+	{#if user}
+		<ManageForm {user} subscription={data.subscriptions?.[0]} />
+	{:else}
+		<h2>Oups...</h2>
+		<p>An error has come. Please contact us !</p>
+	{/if}
+</main>
+
+<style lang="scss">
+	main {
+		padding: 15px;
+		> h1 {
+			text-align: center;
+		}
+	}
+</style>

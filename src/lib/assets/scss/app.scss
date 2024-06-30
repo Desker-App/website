@@ -67,7 +67,7 @@ input {
 	outline-color: var(--color-primary-accent);
 }
 
-a {
+a:not(:has(> button)) {
 	color: var(--color-secondary-accent);
 	font-weight: 700;
 	text-decoration: none;
@@ -77,6 +77,9 @@ a {
 		text-decoration: underline;
 		color: var(--color-secondary);
 	}
+}
+a:has(> button) {
+	text-decoration: none;
 }
 
 //? https://codepen.io/tomhodgins/pen/QEwvEK/

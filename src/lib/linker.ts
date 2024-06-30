@@ -32,7 +32,8 @@ export async function updateLink(): Promise<boolean | undefined> {
 		Cookies.set(USER_ID_COOKIE_NAME, data.user.id, {
 			sameSite: "strict",
 		});
-		return true;
+		// ? Returning true only if the user is a real user, else we act like an unconnected user
+		return !data.user.is_anonymous;
 	}
 
 	unlink();
