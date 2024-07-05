@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
 	let force_update = writable(0);
-	export async function updateAuth(): Promise<void> {
+	export async function updateAuth(force = false): Promise<void> {
 		force_update.set(get(force_update) + 1);
 
 		return updateLink().then((require_update) => {
@@ -11,7 +11,7 @@
 					toast.success("Your account has been (re)linked!");
 				else toast.error("Your account has been unlinked.");
 				return invalidateAll().then(() => updateAuth());
-			}
+			} else if (force) invalidateAll().then(() => updateAuth());
 		});
 	}
 </script>
@@ -28,6 +28,7 @@
 	import { goto, invalidateAll } from "$app/navigation";
 	import { updateLink } from "$lib/linker";
 	import type { LayoutData } from "./$types";
+	import Footer from "$lib/components/Footer.svelte";
 
 	export let data: LayoutData;
 	onMount(async () => {
@@ -38,8 +39,9 @@
 				user: true,
 				desks: true,
 			});
-			updateAuth();
-		}
+			updateAuth(true);
+		} else updateAuth();
+
 		if (searchParams.has("toast")) {
 			try {
 				const { method, message } = JSON.parse(
@@ -112,3 +114,5 @@
 	<Header user={data.user} />
 	<slot />
 {/key}
+
+<Footer />

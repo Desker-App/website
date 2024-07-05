@@ -9,9 +9,15 @@
 	import { goto } from "$app/navigation";
 	import { updateAuth } from "../../routes/+layout.svelte";
 	import type Stripe from "stripe";
+	import Price from "./Price.svelte";
 
 	export let user: DeskerUser;
 	export let subscription: Stripe.Subscription | undefined = undefined;
+	export let product:
+		| (Stripe.Product & {
+				price?: Stripe.Price | null;
+		  })
+		| undefined = undefined;
 </script>
 
 <section id="account">
@@ -56,6 +62,9 @@
 			<tr>
 				<th>Name</th>
 				<th>Desk limit</th>
+				{#if product?.price}
+					<th>Price (per {product.price.recurring?.interval})</th>
+				{/if}
 			</tr>
 		</thead>
 
@@ -63,6 +72,11 @@
 			<tr>
 				<td>{user.plan.name}</td>
 				<td>{user.plan.desks_limit || "Unlimited"}</td>
+				{#if product?.price}
+					<td>
+						<Price price={product.price} />
+					</td>
+				{/if}
 			</tr>
 		</tbody>
 	</table>
@@ -71,7 +85,10 @@
 	</a>
 
 	{#if subscription}
-		<a href="/downgrade">
+		<a
+			href="/manage/downgrade?subscription={subscription.id}"
+			data-sveltekit-preload-data="off"
+		>
 			<button type="button">Revoke subscription</button>
 		</a>
 	{/if}

@@ -27,7 +27,7 @@ export async function getUserPlan(user_id: string) {
 
 export async function unlinkCustomer(desker_id: string) {
 	const { user_metadata } = await getUser(desker_id);
-	delete user_metadata[STRIPE_CUSTOMER_ID_METADATA_KEY];
+	user_metadata[STRIPE_CUSTOMER_ID_METADATA_KEY] = null;
 
 	const { error: _err } = await supabase_client.auth.admin.updateUserById(
 		desker_id,

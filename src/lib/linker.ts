@@ -30,7 +30,7 @@ export async function updateLink(): Promise<boolean | undefined> {
 
 	if (data?.user) {
 		Cookies.set(USER_ID_COOKIE_NAME, data.user.id, {
-			sameSite: "strict",
+			sameSite: "Lax",
 		});
 		// ? Returning true only if the user is a real user, else we act like an unconnected user
 		return !data.user.is_anonymous;
@@ -41,7 +41,7 @@ export async function updateLink(): Promise<boolean | undefined> {
 }
 
 /**
- * !! Use this function in server-side only !
+ * !! Use this function in server-side only
  */
 export function getUserIdFromCookies<
 	A extends boolean = false,

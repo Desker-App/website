@@ -39,5 +39,6 @@ export let GET = async ({ params: { id }, url, cookies }) => {
 			500,
 			"Failed to generate a billing session for selected product."
 		);
+	
 	throw redirect(303, billing_url);
 };

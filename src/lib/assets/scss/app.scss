@@ -80,6 +80,7 @@ a:not(:has(> button)) {
 }
 a:has(> button) {
 	text-decoration: none;
+	display: inline-block;
 }
 
 //? https://codepen.io/tomhodgins/pen/QEwvEK/

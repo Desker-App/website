@@ -48,6 +48,7 @@
 
 		display: flex;
 		flex-direction: column;
+		align-items: flex-start;
 		width: 325px;
 
 		aspect-ratio: 1.5 / 2;
