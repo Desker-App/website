@@ -1,21 +1,24 @@
 <script lang="ts">
-	import { goto, replaceState } from "$app/navigation";
+	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import {
 		askFor,
 		type DeskerUser,
-		type RequestsAnswers,
 	} from "$lib/message";
 	import toast from "svelte-french-toast";
 	import Form from "./Form.svelte";
 	import { updateAuth } from "../../routes/+layout.svelte";
+	import { onMount } from "svelte";
 
 	export let user: DeskerUser | undefined = undefined;
+	const state = Array.from($page.url.searchParams.keys())[0] as
+		| "create"
+		| "connect"
+		| undefined
+		| (string & {});
 
 	const _default_redirect = "/manage";
 	export let redirect = _default_redirect;
-	if (user && !user.is_anonymous && redirect !== _default_redirect)
-		goto(redirect);
 
 	let showMailboxCheckMessage = user?.email && !user.confirmed_at;
 	async function formSubmited(data: FormData) {
@@ -76,6 +79,16 @@
 			}
 		}
 	}
+
+	onMount(() => {
+		if (state !== "create" && state !== "connect") {
+			if (state) $page.url.searchParams.delete(state);
+			goto(`?create&${$page.url.searchParams.toString()}`);
+		}
+
+		if (user && !user.is_anonymous && redirect !== _default_redirect)
+			goto(redirect);
+	});
 </script>
 
 <Form onSubmit={formSubmited}>
@@ -94,7 +107,7 @@
 					href="/manage">account manager</a
 				> and logout !
 			</p>
-		{:else if $page.state.linkType === "create"}
+		{:else if $page.state.linkType === "create" || state === "create"}
 			<h2>Create your account</h2>
 
 			<label for="username">
@@ -132,7 +145,7 @@
 
 			<button type="submit">Create and link</button>
 			<a href="?connect">Already have an account ?</a>
-		{:else if $page.state.linkType === "connect"}
+		{:else if $page.state.linkType === "connect" || state === "connect"}
 			<h2>Connect to an existing account</h2>
 
 			{#await askFor("desks") then { data }}
@@ -178,15 +191,6 @@
 			<button type="submit">Connect and link</button>
 			<a href="./reset-psw">Forgot your password ?</a>
 			<a href="./link?create">Don't have an account ?</a>
-		{:else}
-			<h2>Oups... An error occured.</h2>
-			<button
-				type="button"
-				on:click={() =>
-					replaceState("", {
-						linkType: "create",
-					})}>Try to fix it...</button
-			>
 		{/if}
 	</div>
 </Form>

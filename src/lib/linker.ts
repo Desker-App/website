@@ -13,10 +13,12 @@ export function unlink() {
  */
 export async function updateLink(): Promise<boolean | undefined> {
 	if (!browser) throw new Error("Cannot evaluate script in server side.");
+	const currentUserID = Cookies.get(USER_ID_COOKIE_NAME);
+
 	const answer = await askFor("ping").catch(() => {
 		unlink();
 	});
-	if (!answer) return false;
+	if (!answer) return currentUserID ? false : undefined;
 
 	const { data } = await askFor("user").catch(() => {
 		unlink();
@@ -24,9 +26,8 @@ export async function updateLink(): Promise<boolean | undefined> {
 			data: undefined,
 		};
 	});
-	const current = Cookies.get(USER_ID_COOKIE_NAME);
 
-	if (data?.user?.id === current) return;
+	if (data?.user?.id === currentUserID) return;
 
 	if (data?.user) {
 		Cookies.set(USER_ID_COOKIE_NAME, data.user.id, {

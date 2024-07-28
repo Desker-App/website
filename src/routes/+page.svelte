@@ -1,15 +1,11 @@
 <script lang="ts">
-	import Background from "$lib/assets/hero-bg.svg";
-	import Stars from "svelte-icons/wi/WiStars.svelte";
-	import Modulable from "svelte-icons/fa/FaDrawPolygon.svelte";
-	import Compass from "svelte-icons/fa/FaDraftingCompass.svelte";
 </script>
 
-<div class="hero" style:--bg={`url("${Background}")`}>
+<div class="hero">
 	<div class="text">
 		<h1>Meet Desker</h1>
 		<p>
-			Your all-in-one tab manager, saver, and all of that synced to every
+			Your all-in-one tabs manager, saver, and all of that synced to every
 			devices
 		</p>
 	</div>
@@ -21,15 +17,12 @@
 		<h2>Desker advantages</h2>
 		<ol>
 			<li>
-				<Compass />
 				<p>Thought for productivity and time saving</p>
 			</li>
 			<li>
-				<Stars />
 				<p>Simple and minimal interface</p>
 			</li>
 			<li>
-				<Modulable />
 				<p>Very easy to use and to customize</p>
 			</li>
 		</ol>
@@ -39,9 +32,13 @@
 <style lang="scss">
 	.hero {
 		height: 75vh;
-		background: var(--bg);
+		background: radial-gradient(
+			circle at 15%,
+			var(--color-primary),
+			var(--color-secondary)
+		);
 		background-size: cover;
-		background-position: center;
+		background-position: 25% 95%;
 
 		display: flex;
 		align-items: center;
@@ -60,12 +57,24 @@
 	}
 
 	main {
-		background: linear-gradient(
-			to bottom,
-			var(--color-secondary-accent),
-			var(--color-primary) 15px
-		);
+		background-color: var(--color-primary);
 		padding: 15px 10px;
+		position: relative;
+
+		&::before {
+			content: "";
+			position: absolute;
+			bottom: 100%;
+			left: 0;
+			width: 100%;
+			height: 15px;
+
+			background: linear-gradient(
+				to bottom,
+				transparent,
+				var(--color-primary)
+			);
+		}
 
 		> section {
 			margin: 10px 0;

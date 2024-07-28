@@ -11,3 +11,18 @@
 		{/each}
 	</ul>
 </footer>
+
+<style lang="scss">
+	footer {
+		padding: 15px 10px;
+
+		ul {
+			list-style: none;
+	
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 15px;
+		}
+	}
+</style>

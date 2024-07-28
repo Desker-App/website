@@ -8,10 +8,9 @@
 	let redirect: string | undefined = undefined;
 
 	afterNavigate(() => {
-		const params = new URLSearchParams($page.url.search);
-		redirect = params.get("redirect") || undefined;
+		redirect = $page.url.searchParams.get("redirect") || undefined;
 
-		const current = params.has("connect") ? "connect" : "create";
+		const current = $page.url.searchParams.has("connect") ? "connect" : "create";
 		if (current === "create" || current === "connect") {
 			replaceState(`?${current}`, {
 				linkType: current,

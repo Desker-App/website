@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
 	let force_update = writable(0);
+
 	export async function updateAuth(force = false): Promise<void> {
 		force_update.set(get(force_update) + 1);
 
@@ -103,7 +104,7 @@
 				}
 			}
 
-			replaceState("./", {});
+			replaceState("", {});
 		}
 	});
 </script>
