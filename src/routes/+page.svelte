@@ -1,5 +1,10 @@
 <script lang="ts">
+	import DeskerBanner from "$lib/assets/brand/Banner.svg";
 </script>
+
+<svelte:head>
+	<title>Desker : your all-in-one tabs manager and saver</title>
+</svelte:head>
 
 <div class="hero">
 	<div class="text">
@@ -10,7 +15,16 @@
 		</p>
 	</div>
 
-	<div class="video-presentation"></div>
+	<div class="video-presentation">
+		<video
+			src="/videos/presentation.mp4"
+			controls={false}
+			muted
+			poster={DeskerBanner}
+			autoplay
+			loop
+		></video>
+	</div>
 </div>
 <main>
 	<section id="advantages">
@@ -27,6 +41,26 @@
 			</li>
 		</ol>
 	</section>
+	<section id="functionnalities">
+		<h2>Desker functionnalities</h2>
+		<ol>
+			<li>An all-in-one tab manager and saver</li>
+			<li>Order your desks as your want</li>
+			<li>Name them, re-name them and (re)color them</li>
+			<li>Apply them to get back all your desk's tabs</li>
+			<li>And all of that synced to every of your devices</li>
+		</ol>
+	</section>
+
+	<div class="cta">
+		<a href="/get"
+			><button type="button"
+				>Try desker now for free, <strong
+					>and without any account creation</strong
+				> !</button
+			></a
+		>
+	</div>
 </main>
 
 <style lang="scss">
@@ -40,9 +74,14 @@
 		background-size: cover;
 		background-position: 25% 95%;
 
-		display: flex;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
 		align-items: center;
-		justify-content: space-between;
+		@media screen and (max-width: 710px) {
+			grid-template-columns: unset;
+			grid-template-rows: 30% 1fr;
+			text-align: center;
+		}
 
 		padding: 0 25px;
 
@@ -52,6 +91,19 @@
 		> .text {
 			> h1 {
 				font-size: 50px;
+			}
+		}
+
+		> .video-presentation {
+			height: 100%;
+			display: grid;
+			place-items: center;
+
+			> video {
+				aspect-ratio: 16 / 9;
+				border-radius: 15px;
+				max-height: 45vh;
+				pointer-events: none;
 			}
 		}
 	}
@@ -82,21 +134,24 @@
 				text-decoration: underline;
 				margin-bottom: 15px;
 			}
-			&#advantages {
-				> ol {
-					list-style-position: inside;
-					margin-left: 15px;
-					> li {
-						display: flex;
-						align-items: center;
-						gap: 10px;
-						margin: 10px 0;
-						:global(svg) {
-							width: 18px;
-						}
+			> ol {
+				list-style-position: inside;
+				margin-left: 15px;
+				> li {
+					display: flex;
+					align-items: center;
+					gap: 10px;
+					margin: 10px 0;
+					:global(svg) {
+						width: 18px;
 					}
 				}
 			}
+		}
+		.cta {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 	}
 </style>
