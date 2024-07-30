@@ -17,7 +17,7 @@
 
 	<div class="video-presentation">
 		<video
-			src="/videos/presentation.mp4"
+			src="/videos/presentation.webm"
 			controls={false}
 			muted
 			poster={DeskerBanner}
@@ -103,7 +103,6 @@
 				aspect-ratio: 16 / 9;
 				border-radius: 15px;
 				max-height: 45vh;
-				pointer-events: none;
 			}
 		}
 	}

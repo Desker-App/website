@@ -1,15 +1,19 @@
 import { error } from "@sveltejs/kit";
-import fs from "node:fs";
-import path from "node:path";
 
-const policiesFolderPath = path.join(import.meta.dirname, "../../../lib/policies");
+const policies = Object.entries(
+	import.meta.glob<string>("$lib/policies/*.html", {
+		query: "?raw",
+		import: "default",
+	})
+);
 
-export const load = ({ params }) => {
-	const filePath = path.join(policiesFolderPath, params.page + ".html");
-	if (!fs.existsSync(filePath))
-		throw error(404, "This policies has not been written.");
+export const load = async ({ params }) => {
+	const policy = policies.find(([path, _]) =>
+		path.endsWith(`${params.page}.html`)
+	);
+	if (!policy) throw error(404, "This policies has not been written.");
 
 	return {
-		html: fs.readFileSync(filePath, { encoding: "utf-8" }),
+		html: await policy[1](),
 	};
 };
