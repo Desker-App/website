@@ -1,5 +1,4 @@
 import stripe_client from "../stripe";
-import supabase_client from "../supabase";
 import { error } from "@sveltejs/kit";
 import {
 	getUser,
@@ -118,6 +117,10 @@ export async function createCustomer(desker_user: string | User) {
 	});
 	await linkCustomer(id, customer.id);
 	return customer;
+}
+
+export async function deleteCustomer(customer_id: string) {
+	return stripe_client.customers.del(customer_id)
 }
 
 export async function getCustomerSubscriptions(getter: customerGetterParams) {

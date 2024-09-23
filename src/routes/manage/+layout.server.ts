@@ -1,24 +1,24 @@
-import { getUserIdFromCookies } from "$lib/linker.js";
+import { getUserTokenFromCookies } from "$lib/linker.js";
 import {
 	getCustomerProducts,
 	getCustomerSubscriptions,
 } from "$lib/server/api/customer.js";
-import { getUser } from "$lib/server/api/user.js";
+import { getUser, getUserFromToken } from "$lib/server/api/user.js";
 import client from "$lib/server/stripe.js";
 import { redirect } from "@sveltejs/kit";
 
 export const load = async (event) => {
-	const user_id = getUserIdFromCookies(event);
-	const user = await getUser(user_id).catch(() => null);
+	const token = getUserTokenFromCookies(event);
+	const user = await getUserFromToken(token).catch(() => null);
 	if (!user || user.is_anonymous) throw redirect(303, `/link`);
 
 	return {
 		subscriptions: await getCustomerSubscriptions({
-			desker_id: user_id,
+			desker_id: user.id,
 		}).catch(() => []),
 		products: await getCustomerProducts(
 			{
-				desker_id: user_id,
+				desker_id: user.id,
 			},
 			true
 		)

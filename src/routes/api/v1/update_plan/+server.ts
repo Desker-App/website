@@ -1,5 +1,4 @@
-import { getCustomerProducts } from "$lib/server/api/customer.js";
-import { setPlan, updateUserPlan } from "$lib/server/api/plan.js";
+import { updateUserPlan } from "$lib/server/api/plan.js";
 import { error } from "@sveltejs/kit";
 
 export const HEAD = async ({ url: { searchParams } }) => {

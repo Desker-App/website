@@ -1,5 +1,6 @@
-import { getUserIdFromCookies } from "$lib/linker.js";
+import { getUserTokenFromCookies } from "$lib/linker.js";
 import { getCustomer } from "$lib/server/api/customer.js";
+import { getUserFromToken } from "$lib/server/api/user.js";
 import stripe_client from "$lib/server/stripe";
 import { error, redirect } from "@sveltejs/kit";
 
@@ -8,10 +9,11 @@ export let GET = async ({ params: { id }, url, cookies }) => {
 		throw error(404, "The product has not been found.");
 	});
 
-	const user_id = getUserIdFromCookies({ cookies, url });
+	const token = getUserTokenFromCookies({ cookies, url });
+	const user = await getUserFromToken(token);
 
 	const customer = await getCustomer({
-		desker_id: user_id,
+		desker_id: user.id,
 		create_if_not_exists: true,
 	});
 
@@ -27,7 +29,7 @@ export let GET = async ({ params: { id }, url, cookies }) => {
 		],
 		mode: "subscription",
 		customer: customer.id,
-		client_reference_id: user_id,
+		client_reference_id: user.id,
 		success_url: success_url.toString(),
 		cancel_url: cancel_url.toString(),
 		allow_promotion_codes: true,
@@ -39,6 +41,6 @@ export let GET = async ({ params: { id }, url, cookies }) => {
 			500,
 			"Failed to generate a billing session for selected product."
 		);
-	
+
 	throw redirect(303, billing_url);
 };

@@ -1,6 +1,5 @@
 import { error } from "@sveltejs/kit";
 import supabase_client from "../supabase";
-import type { Database } from "$lib/types/supabase";
 export const STRIPE_CUSTOMER_ID_METADATA_KEY = "__stripe_customer";
 
 export async function getUser(id: string) {
@@ -10,19 +9,10 @@ export async function getUser(id: string) {
 	if (_err) throw error(_err.status || 500, _err.message);
 	return data.user;
 }
-
-export async function getUserPlan(user_id: string) {
-	const { error: _err, data: plan } = await supabase_client
-		.from("users")
-		.select("plan (*)")
-		.eq("id", user_id)
-		.maybeSingle();
-
-	if (_err) throw error(500, _err);
-	if (!plan?.plan)
-		throw new Error("Failed to fetch plan. Try to reload the extension.");
-
-	return plan.plan as unknown as Database["public"]["Tables"]["plans"]["Row"];
+export async function getUserFromToken(token: string) {
+	const { error: _err, data } = await supabase_client.auth.getUser(token);
+	if (_err) throw error(_err.status || 500, _err.message);
+	return data.user;
 }
 
 export async function unlinkCustomer(desker_id: string) {

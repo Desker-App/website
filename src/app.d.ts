@@ -1,15 +1,15 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
-	namespace App {
-		// interface Error {}
-		// interface Locals {}
-		// interface PageData {}
-		interface PageState {
-			linkType?: "create" | "connect"
-		}
-		// interface Platform {}
-	}
+  namespace App {
+    // interface Error {}
+    // interface Locals {}
+    // interface PageData {}
+    interface PageState {
+      currentParams?: { [key: string]: string };
+    }
+    // interface Platform {}
+  }
 }
 
 export {};

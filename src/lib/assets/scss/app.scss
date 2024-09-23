@@ -20,6 +20,7 @@ body {
 	background-color: var(--color-white);
 	color: var(--color-black);
 	font-family: $font-sans;
+	width: 100% !important;
 }
 
 @for $i from 1 to 7 {
